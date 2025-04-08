@@ -48,7 +48,7 @@
             <div v-if="currentCard" class="bg-yellow-100 p-4 rounded shadow mb-4">
                 <div class="text-lg font-semibold">{{ currentCard.front }}</div>
 
-                <div v-if="revealed" class="mt-2 text-gray-700">
+                <div class="mt-2 text-gray-700">
                     {{ currentCard.boxNumber }}
                 </div>
 
