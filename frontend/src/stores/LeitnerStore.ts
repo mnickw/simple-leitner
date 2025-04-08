@@ -4,7 +4,7 @@ import { SessionResult } from '@/models/SessionResult';
 
 export const useLeitnerStore = defineStore('LeitnerStore', {
     state: () => ({
-        cardsReadyForExport: new Map<string, Card>(), // CardId -> Card
+        cards: new Map<string, Card>(), // CardId -> Card
         sessionResults: [] as SessionResult[],
         inSession: false
     }),
@@ -18,21 +18,21 @@ export const useLeitnerStore = defineStore('LeitnerStore', {
                 return false;
             }
 
-            this.cardsReadyForExport.clear();
+            this.cards.clear();
 
             for (const Card of imported) {
-                this.cardsReadyForExport.set(Card.id, Card);
+                this.cards.set(Card.id, Card);
             }
 
             return true;
         },
 
         exportData(): string {
-            return JSON.stringify(Array.from(this.cardsReadyForExport.values()), null, 4);
+            return JSON.stringify(Array.from(this.cards.values()), null, 4);
         },
 
         addCard(Card: Card): void {
-            this.cardsReadyForExport.set(Card.id, Card);
+            this.cards.set(Card.id, Card);
         },
 
         startSession(): void {
@@ -46,7 +46,7 @@ export const useLeitnerStore = defineStore('LeitnerStore', {
 
         endSession(): void {
             for (const { cardId, newBoxId } of this.sessionResults) {
-                const oldBoxId = this.cardsReadyForExport.get(cardId)?.boxNumber;
+                const oldBoxId = this.cards.get(cardId)?.boxNumber;
                 if (oldBoxId === undefined) {
                     console.error(`Card ${cardId} not found in cardsReadyForExport`);
                     continue;
@@ -57,9 +57,9 @@ export const useLeitnerStore = defineStore('LeitnerStore', {
                     continue;
                 }
 
-                const card = this.cardsReadyForExport.get(cardId);
+                const card = this.cards.get(cardId);
                 if (card) {
-                    this.cardsReadyForExport.set(cardId, { ...card, boxNumber: newBoxId });
+                    this.cards.set(cardId, { ...card, boxNumber: newBoxId });
                 }
                 
             }
