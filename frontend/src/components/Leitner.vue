@@ -49,6 +49,10 @@
                 <div class="text-lg font-semibold">{{ currentCard.front }}</div>
 
                 <div v-if="revealed" class="mt-2 text-gray-700">
+                    {{ currentCard.boxNumber }}
+                </div>
+
+                <div v-if="revealed" class="mt-2 text-gray-700">
                     {{ currentCard.back }}
                 </div>
 
