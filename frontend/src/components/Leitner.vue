@@ -69,6 +69,7 @@
                     <option v-for="n in 10" :key="n" :value="n">Box {{ n }}</option>
                 </select>
                 <button class="btn btn-indigo" @click="answer(customBox)">Custom Box</button>
+                <button class="btn btn-indigo" @click="minBoxNumber = currentBoxNumber + 1">Go to next box</button>
             </div>
 
             <button class="btn btn-gray" @click="store.endSession()">End Session</button>
@@ -142,11 +143,12 @@ const boxStats = computed(() => {
 
 const sessionQueue = computed(() => {
     return allCards.value.sort((a, b) => a.boxNumber - b.boxNumber)
-        .filter(c => !store.sessionResults.find(r => r.cardId === c.id));
+        .filter(c => !store.sessionResults.find(r => r.cardId === c.id) && c.boxNumber >= minBoxNumber.value);
 });
 
 const currentCard = computed(() => sessionQueue.value[0] || null);
 const currentBoxNumber = computed(() => currentCard.value?.boxNumber ?? 1);
+const minBoxNumber = ref(1);
 
 const answer = (boxId: number) => {
     if (currentCard.value) {
